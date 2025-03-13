@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Job Matches</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container mt-5">
+        <h1>Job Listings and Matching Resumes</h1>
+        <hr>
+        {% for match in job_matches %}
+            <div class="card my-4">
+                <div class="card-header">
+                    <h2>Job ID: {{ match.job_id }}</h2>
+                    <h3>{{ match.job_title }}</h3>
+                </div>
+                <div class="card-body">
+                    <h5>Matching Resumes:</h5>
+                    {% if match.resumes %}
+                        <ul class="list-group">
+                            {% for resume in match.resumes %}
+                                <li class="list-group-item">
+                                    <strong>Name:</strong> {{ resume.name }} <br>
+                                    <strong>Email:</strong> {{ resume.email }} <br>
+                                    <strong>Phone:</strong> {{ resume.phone }}
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    {% else %}
+                        <p>No matching resumes found.</p>
+                    {% endif %}
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</body>
+</html>

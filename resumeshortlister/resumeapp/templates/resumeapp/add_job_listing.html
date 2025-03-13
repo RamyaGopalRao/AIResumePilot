@@ -1,0 +1,12 @@
+{% extends 'resumeapp/base.html' %}
+
+{% block title %}Add Skill{% endblock %}
+
+{% block content %}
+        <h2>Add Job Listing</h2>
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="btn btn-success">Submit</button>
+        </form>
+{% endblock %}

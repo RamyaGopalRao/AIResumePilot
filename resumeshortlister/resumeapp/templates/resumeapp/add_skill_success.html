@@ -1,0 +1,12 @@
+{% extends 'resumeapp/base.html' %}
+
+{% block title %}Add Skill{% endblock %}
+
+{% block content %}
+    <h1>Skill Added Successfully!</h1>
+    <p>Your skill has been added to the database.</p>
+    <a href="{% url 'add_skill' %}">Add another skill</a>
+    <br>
+    <a href="{% url 'resume_list' %}">Go to Resume List</a>
+{% endblock %}
+

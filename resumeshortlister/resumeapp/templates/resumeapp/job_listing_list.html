@@ -1,0 +1,28 @@
+{% extends 'resumeapp/base.html' %}
+
+{% block title %}Add Skill{% endblock %}
+
+{% block content %}
+     <h1>Job Listings</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Description</th>
+                <th>Required Skills</th>
+                <th>Specifications</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for job in job_listings %}
+            <tr>
+                <td>{{ job.title }}</td>
+                <td>{{ job.description }}</td>
+                <td>{{ job.required_skills.all|join:", " }}</td>
+                <td>{{ job.specifications }}</td>
+                <td>{{ job.years_of_experience_required }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
