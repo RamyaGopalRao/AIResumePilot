@@ -1,0 +1,26 @@
+{% extends 'resumeapp/base.html' %}
+
+{% block title %}Add Skill{% endblock %}
+
+{% block content %}
+    <h1>Shortlist Resumes</h1>
+    <form method="post" action="">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Filter</button>
+    </form>
+    <h2>Shortlisted Resumes</h2>
+    <ul>
+               {% for resume in resume_details %}
+        <li>
+            <h3>{{ resume.name }}</h3>
+            <p>Email: {{ resume.email }}</p>
+            <p>Phone: {{ resume.phone }}</p>
+            <p>Skills: {{ resume.skills }}</p> <!-- Adjusted to directly display the skills string -->
+            <p>Education: {{ resume.education }}</p>
+            <p>Experience: {{ resume.experience }}</p>
+        </li>
+        {% endfor %}
+
+    </ul>
+{% endblock %}

@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Resume Shortlister{% endblock %}</title>
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}">
+
+    <!-- Link to Telerik and Select2 CSS -->
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css">
+    <link rel="stylesheet" href="https://kendo.cdn.telerik.com/2023.1.425/styles/kendo.default-v2.min.css">
+
+    <!-- Include jQuery (required for Kendo UI) -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <!-- Include Kendo UI script -->
+    <script src="https://kendo.cdn.telerik.com/2023.1.425/js/kendo.all.min.js"></script>
+    <style>
+        /* General Styles */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background-color: #333;
+            color: white;
+            padding: 1rem 0;
+            text-align: center;
+        }
+        nav {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #444;
+            padding: 0.5rem;
+        }
+        nav ul {
+            display: flex;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+        nav ul li {
+            margin: 0 1rem;
+            position: relative; /* For dropdown positioning */
+        }
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            background-color: #555;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+        nav ul li a:hover {
+            background-color: #777;
+        }
+        /* Dropdown Menu */
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            top: 100%; /* Position below the parent */
+            left: 0;
+            background-color: #555;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            border-radius: 5px;
+            z-index: 1;
+        }
+        .dropdown-content a {
+            display: block;
+            padding: 0.5rem 1rem;
+            color: white;
+            text-decoration: none;
+        }
+        .dropdown-content a:hover {
+            background-color: #777;
+        }
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+        /* Main Content */
+        main {
+            margin: 2rem auto;
+            padding: 2rem;
+            background-color: white;
+            max-width: 800px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 1rem 0;
+            background-color: #333;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Resume Shortlister</h1>
+    </header>
+    <nav>
+        <ul>
+            <li><a href="{% url 'resume_list' %}">Resume List</a></li>
+            <li class="dropdown">
+                <a href="javascript:void(0)">Add</a>
+                <div class="dropdown-content">
+                    <a href="{% url 'add_skill' %}">Add Skill</a>
+                    <a href="{% url 'add_job_listing' %}">Add Job Listing</a>
+                    <a href="{% url 'job_listing_success' %}">Add Education</a>
+                </div>
+            </li>
+            <li><a href="{% url 'shortlist_jobs' %}">Shortlist Jobs</a></li>
+            <li><a href="{% url 'upload' %}">Upload Resume</a></li>
+            <li><a href="{% url 'shortlist_resumes' %}">Shortlist Resumes</a></li>
+             <li><a href="{% url 'job_matches' %}">Matching Jobs</a></li>
+
+
+
+        </ul>
+    </nav>
+
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Resume Shortlister</p>
+    </footer>
+
+    <!-- Link to Telerik and Select2 JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+    <link rel="stylesheet" href="https://kendo.cdn.telerik.com/2023.3.1000/styles/kendo.default-v2.min.css" />
+    <script src="https://kendo.cdn.telerik.com/2023.3.1000/js/jquery.min.js"></script>
+    <script src="https://kendo.cdn.telerik.com/2023.3.1000/js/kendo.all.min.js"></script>
+
+    <script></script>
+
+    <script>
+        $(document).ready(function() {
+            // Initialize Select2 dropdowns
+            $('.select2').select2({
+                placeholder: 'Select required skills',
+                allowClear: true
+            });
+        });
+
+    </script>
+<script>
+    $(document).ready(function() {
+        // Initialize the grid
+        $("#resumeGrid").kendoGrid({
+            dataSource: {
+                data: {{ resumes|safe }}, // Bind resumes data passed from Django
+                schema: {
+                    model: {
+                        fields: {
+                            name: { type: "string" },
+                            email: { type: "string" },
+                            phone: { type: "string" },
+                            skills: { type: "string" },
+                            is_duplicate: { type: "boolean" },
+                            education: { type: "string" }, // Add custom logic to display links
+                            experience: { type: "string" } // Add custom logic to display links
+                        }
+                    }
+                },
+                pageSize: 10 // Controls pagination
+            },
+            height: 400,
+            sortable: true, // Enable column sorting
+            pageable: true, // Enable pagination
+            columns: [
+                { field: "name", title: "Name" },
+                { field: "email", title: "Email" },
+                { field: "phone", title: "Phone" },
+                { field: "skills", title: "Skills" },
+                { field: "is_duplicate", title: "Duplicate Entry" },
+                {
+                    field: "education",
+                    title: "Education",
+                    template: "<a href='/education/#=id#'>View Education</a>"
+                },
+                {
+                    field: "experience",
+                    title: "Experience",
+                    template: "<a href='/experience/#=id#'>View Experience</a>"
+                }
+            ]
+        });
+    });
+    function sendEmail(email) {
+    fetch('/send-email/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: email })
+    })
+    .then(response => response.json())
+    .then(data => alert(data.status))
+    .catch(error => console.error('Error:', error));
+}
+
+function sendWhatsApp(phone) {
+    fetch('/send-whatsapp/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ phone: phone })
+    })
+    .then(response => response.json())
+    .then(data => alert(data.status))
+    .catch(error => console.error('Error:', error));
+}
+</script>
+
+</body>
+</html>

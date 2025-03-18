@@ -1,0 +1,80 @@
+{% extends 'resumeapp/base.html' %}
+
+{% load static %} <!-- Add this line to load the static tag -->
+
+{% block title %}Resume List{% endblock %}
+
+{% block content %}
+    <h1>Job Listings and Matching Resumes</h1>
+    <hr>
+    {% for match in job_matches %}
+        <div class="card my-4">
+            <div class="card-header">
+                <h2>Job ID: {{ match.job_id }}</h2>
+                <h3>{{ match.job_title }}</h3>
+            </div>
+            <div class="card-body">
+                <h5>Matching Resumes:</h5>
+                {% if match.matching_resumes %}
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Skill</th>
+                                <th>Experience</th>
+                                <th>Email</th>
+                                <th>Phone</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for resume in match.matching_resumes %}
+                            <tr>
+                                <td>{{ resume.name }}</td>
+                                <td>{{ resume.skill }}</td>
+                                <td>{{ resume.experience }}</td>
+                                <td>{{ resume.email }}</td>
+                                <td>{{ resume.phone }}</td>
+                                <td>
+                                    <button onclick="sendEmail('{{ resume.email }}')" class="btn btn-link">
+                                        <img src="{% static 'images/email-icon.png' %}" alt="Email" width="20" height="20">
+                                    </button>
+                                    <button onclick="sendWhatsApp('{{ resume.phone }}')" class="btn btn-link">
+                                        <img src="{% static 'images/whatsapp-icon.png' %}" alt="WhatsApp" width="20" height="20">
+                                    </button>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                {% else %}
+                    <p>No matching resumes found.</p>
+                {% endif %}
+            </div>
+        </div>
+    {% endfor %}
+{% endblock %}
+
+<script>
+function sendEmail(email) {
+    fetch('/send-email/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: email })
+    })
+    .then(response => response.json())
+    .then(data => alert(data.status))
+    .catch(error => console.error('Error:', error));
+}
+
+function sendWhatsApp(phone) {
+    fetch('/send-whatsapp/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ phone: phone })
+    })
+    .then(response => response.json())
+    .then(data => alert(data.status))
+    .catch(error => console.error('Error:', error));
+}
+</script>

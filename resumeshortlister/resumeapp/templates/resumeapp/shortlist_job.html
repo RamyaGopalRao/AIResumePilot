@@ -1,0 +1,47 @@
+{% extends 'resumeapp/base.html' %}
+
+{% block title %}Shortlisted Resumes{% endblock %}
+
+{% block content %}
+    <h1>Shortlisted Resumes</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>Skills</th>
+                <th>Education</th>
+                <th>Experience</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for resume in resume_details %}
+            <tr>
+                <td>{{ resume.name }}</td>
+                <td>{{ resume.email }}</td>
+                <td>{{ resume.phone }}</td>
+                <td>{{ resume.skills }}</td> <!-- Adjusted to directly display the skills string -->
+                <td>{{ resume.education }}</td>
+                <td>{{ resume.experience }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <h2>Job Listings</h2>
+    <ul>
+    {% for job in job_listings %}
+        <li>
+            <h3>{{ job.title }}</h3>
+            <p>{{ job.description }}</p>
+            <p>Specifications: {{ job.specifications }}</p>
+            <p>Required Skills:
+            {% for skill in job.required_skills.all %}
+                {{ skill.name }}{% if not forloop.last %}, {% endif %}
+            {% endfor %}
+            </p>
+        </li>
+    {% endfor %}
+    </ul>
+{% endblock %}
